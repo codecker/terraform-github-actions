@@ -1,0 +1,34 @@
+name: Terraform Deployer
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        shell: bash
+    
+    steps:
+    - name: Checkout
+      id: checkout
+      uses: actions/checkout@v2
+
+    - name: Get Terraform Module version
+      id: tf_version
+      run: |
+        echo "::set-output name=TF_VERSION::$(awk '/required_version/{print $NF}' ./main.tf | tr -d \")"
+    
+    - name: Install Terraform
+      id: tf_install
+      uses: hashicorp/setup-terraform@v1
+      with: 
+        terraform_version: ${{ steps.tf_version.outputs.TF_VERSION }}
+    
+    - name: Validate Installed Terraform Version
+      id: tf_version_validation
+      run: |
+        terraform -v
