@@ -33,6 +33,11 @@ jobs:
       run: |
         terraform -v
         
+    - name: Terraform Init
+      id: tf_init
+      run: |
+        terraform init
+        
     - name: Terraform Plan
       id: tf_plan
       run: |
