@@ -32,3 +32,15 @@ jobs:
       id: tf_version_validation
       run: |
         terraform -v
+        
+    - name: Terraform Plan
+      id: tf_plan
+      run: |
+        terraform plan -out ./tfplan
+    
+    - name: Upload Terraform plan file
+      id: tf_plan_upload
+      uses: actions/upload-artifact@v2
+      with:
+        name: tfplan-file
+        path: ./tfplan
